@@ -1,85 +1,32 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- 1. Google 驗證標籤 (SEO 權限核心) -->
     <meta name="google-site-verification" content="ewtIfo-nwhcsCEggex9vgjKmF7HLATN2PJ1616JP-zg" />
-    
-    <!-- 2. 搜尋引擎最佳化描述 (SEO Meta Tags) -->
     <title>2026 基北區會考成績計算與落點分析系統 🐾</title>
     <meta name="description" content="專為基北區國中會考打造的落點分析系統。內嵌精準的數學、英文公式加權演算法，支援等級與答對題數雙重換算模式，一鍵快速分析出最具參考價值的志願序排序！">
     <meta name="keywords" content="會考落點分析, 基北區會考, 會考成績預估, 115會考, 會考積分計算器, 0xseanlee">
-    
-    <!-- 3. 社交媒體預覽標籤 (Open Graph) -->
     <meta property="og:title" content="2026 基北區會考成績計算與落點分析系統">
     <meta property="og:description" content="內嵌精準公式加權演算法，一鍵獲得最具參考價值的高中職志願落點分析。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://0xseanlee.github.io/cap-score-calculator/">
-    
-    <!-- 4. 外部框架與動畫庫載入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
-        
-        body {
-            font-family: 'Fredoka One', 'Noto Sans TC', sans-serif;
-            background-color: #fcfbfa; /* 同步主網頁：溫柔牛奶白 */
-            color: #4a423a; /* 同步主網頁：高質感深可可色，降低閱讀疲勞 */
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Cinnamoroll 輕奢療癒風：重新定義 Tab 切換鈕樣式 */
-        .tab-active {
-            background-color: #1e88e5; /* 大耳狗天空藍 */
-            color: white;
-            border-color: #1e88e5;
-            box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
-        }
-        
-        .tab-inactive {
-            background-color: #fef9e7; /* 軟綿綿淡黃色 */
-            color: #6d6154;
-            border-color: #f9ebbe;
-        }
-        
-        .tab-inactive:hover {
-            background-color: #ffffff;
-            border-color: #bbdefb;
-            color: #1e88e5;
-        }
-        
-        /* 網頁卡片基本配置 */
-        .cute-card {
-            background-color: #fef9e7;
-            border: 2px solid #f9ebbe;
-            border-radius: 20px;
-        }
-
-        /* 隱藏數字輸入框的上下箭頭 (維持輸入框美觀) */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        body { font-family: 'Fredoka One', 'Noto Sans TC', sans-serif; background-color: #fcfbfa; color: #4a423a; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-active { background-color: #1e88e5; color: white; border-color: #1e88e5; box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2); }
+        .tab-inactive { background-color: #fef9e7; color: #6d6154; border-color: #f9ebbe; }
+        .tab-inactive:hover { background-color: #ffffff; border-color: #bbdefb; color: #1e88e5; }
+        .cute-card { background-color: #fef9e7; border: 2px solid #f9ebbe; border-radius: 20px; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
     </style>
 </head>
-<body class="min-h-screen pb-12">
-
+<body class="min-h-screen pb-12 selection:bg-[#bbdefb] selection:text-[#4a423a]">
 <div class="max-w-4xl mx-auto pt-8 px-4 sm:px-6 lg:px-8">
     <header class="text-center mb-10">
         <h1 class="text-3xl md:text-4xl font-black text-blue-800 tracking-wider mb-2">
@@ -87,9 +34,7 @@
         </h1>
         <p class="text-gray-500">輸入您的成績或題數，為您推薦合適的高中職</p>
     </header>
-
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <!-- Tabs -->
         <div class="flex border-b text-center cursor-pointer select-none">
             <div id="tab-grade" class="flex-1 py-4 font-bold tab-active transition-colors duration-200" onclick="switchTab('grade')">
                 <i class="fas fa-list-ol mr-1"></i> 直接填寫等級
@@ -98,77 +43,29 @@
                 <i class="fas fa-pen mr-1"></i> 填寫答對題數
             </div>
         </div>
-
         <div class="p-6 md:p-8">
-            <!-- Mode 1: Input Grades -->
             <div id="mode-grade" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Chinese -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">國文科等級</label>
-                        <select id="grade-chinese" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                            <option value="7">A++ (7分)</option>
-                            <option value="6">A+ (6分)</option>
-                            <option value="5">A (5分)</option>
-                            <option value="4">B++ (4分)</option>
-                            <option value="3">B+ (3分)</option>
-                            <option value="2">B (2分)</option>
-                            <option value="1">C (1分)</option>
-                        </select>
+                        <select id="grade-chinese" class="subject-select w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg"></select>
                     </div>
-                    <!-- Math -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">數學科等級</label>
-                        <select id="grade-math" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                            <option value="7">A++ (7分)</option>
-                            <option value="6">A+ (6分)</option>
-                            <option value="5">A (5分)</option>
-                            <option value="4">B++ (4分)</option>
-                            <option value="3">B+ (3分)</option>
-                            <option value="2">B (2分)</option>
-                            <option value="1">C (1分)</option>
-                        </select>
+                        <select id="grade-math" class="subject-select w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg"></select>
                     </div>
-                    <!-- English -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">英文科等級</label>
-                        <select id="grade-english" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                            <option value="7">A++ (7分)</option>
-                            <option value="6">A+ (6分)</option>
-                            <option value="5">A (5分)</option>
-                            <option value="4">B++ (4分)</option>
-                            <option value="3">B+ (3分)</option>
-                            <option value="2">B (2分)</option>
-                            <option value="1">C (1分)</option>
-                        </select>
+                        <select id="grade-english" class="subject-select w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg"></select>
                     </div>
-                    <!-- Social -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">社會科等級</label>
-                        <select id="grade-social" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                            <option value="7">A++ (7分)</option>
-                            <option value="6">A+ (6分)</option>
-                            <option value="5">A (5分)</option>
-                            <option value="4">B++ (4分)</option>
-                            <option value="3">B+ (3分)</option>
-                            <option value="2">B (2分)</option>
-                            <option value="1">C (1分)</option>
-                        </select>
+                        <select id="grade-social" class="subject-select w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg"></select>
                     </div>
-                    <!-- Science -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">自然科等級</label>
-                        <select id="grade-science" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                            <option value="7">A++ (7分)</option>
-                            <option value="6">A+ (6分)</option>
-                            <option value="5">A (5分)</option>
-                            <option value="4">B++ (4分)</option>
-                            <option value="3">B+ (3分)</option>
-                            <option value="2">B (2分)</option>
-                            <option value="1">C (1分)</option>
-                        </select>
+                        <select id="grade-science" class="subject-select w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg"></select>
                     </div>
-                    <!-- Writing -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">寫作測驗</label>
                         <select id="grade-writing" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
@@ -183,17 +80,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Mode 2: Input Questions -->
             <div id="mode-question" class="hidden space-y-6">
                 <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-r-lg">
-                    <p class="text-sm text-yellow-700">
-                        <i class="fas fa-info-circle mr-1"></i> 系統將自動依照您輸入的題數，換算為對應等級再計算總積分。數學與英文科包含加權計算。
-                    </p>
+                    <p class="text-sm text-yellow-700"><i class="fas fa-info-circle mr-1"></i> 系統將自動依照您輸入的題數，換算為對應等級再計算總積分。數學與英文科包含加權計算。</p>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Chinese Qs -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">國文 (共42題)</label>
                         <div class="relative">
@@ -201,8 +92,6 @@
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 text-sm">題</div>
                         </div>
                     </div>
-                    
-                    <!-- Social Qs -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">社會 (共54題)</label>
                         <div class="relative">
@@ -210,8 +99,6 @@
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 text-sm">題</div>
                         </div>
                     </div>
-
-                    <!-- Science Qs -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">自然 (共50題)</label>
                         <div class="relative">
@@ -219,8 +106,6 @@
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 text-sm">題</div>
                         </div>
                     </div>
-
-                    <!-- Writing (Always Grade) -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">寫作測驗級分</label>
                         <select id="q-writing" class="w-full rounded-lg border-gray-300 border px-4 py-3 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
@@ -233,69 +118,48 @@
                             <option value="0">零級分 (0分)</option>
                         </select>
                     </div>
-
-                    <!-- Math Qs (Complex) -->
                     <div class="md:col-span-2 p-4 bg-gray-50 border border-gray-200 rounded-xl">
                         <label class="block text-sm font-bold text-gray-800 mb-3"><i class="fas fa-calculator mr-1"></i> 數學科</label>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1">選擇題 (共25題)</label>
-                                <div class="relative">
-                                    <input type="number" id="q-math-mc" min="0" max="25" placeholder="答對題數" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                                </div>
+                                <input type="number" id="q-math-mc" min="0" max="25" placeholder="答對題數" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
                             </div>
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1">非選題 (滿分6分)</label>
-                                <div class="relative">
-                                    <input type="number" id="q-math-nc" min="0" max="6" placeholder="得分" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                                </div>
+                                <input type="number" id="q-math-nc" min="0" max="6" placeholder="得分" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
                             </div>
                         </div>
                     </div>
-
-                    <!-- English Qs (Complex) -->
                     <div class="md:col-span-2 p-4 bg-gray-50 border border-gray-200 rounded-xl">
                         <label class="block text-sm font-bold text-gray-800 mb-3"><i class="fas fa-headphones mr-1"></i> 英文科</label>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1">閱讀 (共43題)</label>
-                                <div class="relative">
-                                    <input type="number" id="q-eng-read" min="0" max="43" placeholder="答對題數" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                                </div>
+                                <input type="number" id="q-eng-read" min="0" max="43" placeholder="答對題數" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
                             </div>
                             <div>
                                 <label class="block text-xs text-gray-500 mb-1">聽力 (共21題)</label>
-                                <div class="relative">
-                                    <input type="number" id="q-eng-listen" min="0" max="21" placeholder="答對題數" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
-                                </div>
+                                <input type="number" id="q-eng-listen" min="0" max="21" placeholder="答對題數" class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-lg">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Calculate Button -->
             <div class="mt-8">
                 <button onclick="calculateAndRecommend()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg transform hover:-translate-y-1">
                     <i class="fas fa-magic mr-2"></i>開始分析落點
                 </button>
             </div>
-            
             <div id="error-message" class="hidden mt-4 text-center text-red-500 font-bold"></div>
         </div>
     </div>
-
-    <!-- Results Section -->
     <div id="results-section" class="hidden mt-8 fade-in space-y-6">
-        
-        <!-- Score Banner -->
         <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white text-center relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
             <div class="relative z-10">
                 <h2 class="text-xl font-medium mb-2 opacity-90">您的會考總積分</h2>
                 <div class="text-6xl font-black mb-4"><span id="final-score">36.0</span> <span class="text-2xl font-normal opacity-80">/ 36.0</span></div>
-                
-                <!-- Display Converted Grades if input was Questions -->
                 <div id="converted-grades-display" class="hidden bg-white/20 rounded-lg p-3 inline-block backdrop-blur-sm">
                     <span class="mr-3">國:<b id="res-c" class="ml-1 text-yellow-300"></b></span>
                     <span class="mr-3">英:<b id="res-e" class="ml-1 text-yellow-300"></b></span>
@@ -305,77 +169,52 @@
                 </div>
             </div>
         </div>
-
-        <!-- Recommendations Container -->
         <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
             <h3 class="text-2xl font-black text-gray-800 mb-6 border-l-4 border-blue-500 pl-4">志願落點分析推薦</h3>
-            
             <div class="space-y-8">
-                <!-- Dream Schools (Reach) -->
                 <div>
                     <h4 class="flex items-center text-lg font-bold text-purple-700 mb-3">
                         <i class="fas fa-star mr-2"></i> 夢幻志願 (分數差0.1~1分內，可嘗試)
                     </h4>
-                    <div id="list-dream" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        <!-- Populated by JS -->
-                    </div>
+                    <div id="list-dream" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
                 </div>
-
-                <!-- Target Schools (Safe) -->
                 <div>
                     <h4 class="flex items-center text-lg font-bold text-green-600 mb-3">
                         <i class="fas fa-check-circle mr-2"></i> 穩妥志願 (分數達標)
                     </h4>
-                    <div id="list-target" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        <!-- Populated by JS -->
-                    </div>
+                    <div id="list-target" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
                 </div>
-
-                <!-- Safe Schools & Under-enrolled -->
                 <div>
                     <h4 class="flex items-center text-lg font-bold text-blue-600 mb-3">
                         <i class="fas fa-shield-alt mr-2"></i> 保底志願 & 不足額學校
                     </h4>
-                    <div id="list-safe" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        <!-- Populated by JS -->
-                    </div>
+                    <div id="list-safe" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script>
     let currentMode = 'grade';
+    const gradePoints = { 'A++': 7, 'A+': 6, 'A': 5, 'B++': 4, 'B+': 3, 'B': 2, 'C': 1 };
+    
+    document.querySelectorAll('.subject-select').forEach(select => {
+        Object.entries(gradePoints).forEach(([grade, pt]) => {
+            select.appendChild(new Option(`${grade} (${pt}分)`, pt));
+        });
+    });
 
-    // Toggle input modes
     function switchTab(mode) {
         currentMode = mode;
-        const tabGrade = document.getElementById('tab-grade');
-        const tabQuestion = document.getElementById('tab-question');
-        const modeGrade = document.getElementById('mode-grade');
-        const modeQuestion = document.getElementById('mode-question');
-        
-        if (mode === 'grade') {
-            tabGrade.className = 'flex-1 py-4 font-bold tab-active transition-colors duration-200';
-            tabQuestion.className = 'flex-1 py-4 font-bold tab-inactive transition-colors duration-200';
-            modeGrade.classList.remove('hidden');
-            modeQuestion.classList.add('hidden');
-        } else {
-            tabQuestion.className = 'flex-1 py-4 font-bold tab-active transition-colors duration-200';
-            tabGrade.className = 'flex-1 py-4 font-bold tab-inactive transition-colors duration-200';
-            modeQuestion.classList.remove('hidden');
-            modeGrade.classList.add('hidden');
-        }
+        const isGrade = mode === 'grade';
+        document.getElementById('tab-grade').className = `flex-1 py-4 font-bold ${isGrade ? 'tab-active' : 'tab-inactive'} transition-colors duration-200`;
+        document.getElementById('tab-question').className = `flex-1 py-4 font-bold ${isGrade ? 'tab-inactive' : 'tab-active'} transition-colors duration-200`;
+        document.getElementById('mode-grade').classList.toggle('hidden', !isGrade);
+        document.getElementById('mode-question').classList.toggle('hidden', isGrade);
         document.getElementById('results-section').classList.add('hidden');
     }
 
-    // Mapping grades to points for calculation
-    const gradePoints = { 'A++': 7, 'A+': 6, 'A': 5, 'B++': 4, 'B+': 3, 'B': 2, 'C': 1 };
-
-    // School Database based on user prompt
     const schools = [
-        // 普通高中
         { name: "建國中學", score: 33.8, type: "normal", displayScore: "33.8" },
         { name: "北一女中", score: 33.6, type: "normal", displayScore: "33.6" },
         { name: "師附(男)", score: 32.8, type: "normal", displayScore: "32.8" },
@@ -432,8 +271,6 @@
         { name: "秀峰高中", score: 10.6, type: "normal", displayScore: "10.6" },
         { name: "明德高中", score: 9.6, type: "normal", displayScore: "9.6" },
         { name: "石碇高中", score: 5.4, type: "normal", displayScore: "5.4" },
-
-        // 技職學校 (取範圍最低標作為門檻)
         { name: "大安高工", score: 18.6, maxScore: 27.6, type: "vocational", displayScore: "27.6~18.6" },
         { name: "士林高商", score: 15.6, maxScore: 21.6, type: "vocational", displayScore: "21.6~15.6" },
         { name: "松山家商", score: 14.6, maxScore: 20.6, type: "vocational", displayScore: "20.6~14.6" },
@@ -449,8 +286,6 @@
         { name: "基隆商工", score: 14.6, type: "vocational", displayScore: "14.6~" },
         { name: "海大附中", score: 13.6, type: "vocational", displayScore: "13.6~" },
         { name: "瑞芳高工", score: 13.6, type: "vocational", displayScore: "13.6~" },
-
-        // 不足額學校 (分數設為0，永遠顯示在保底)
         { name: "基隆女中", score: 0, type: "under", displayScore: "不足額" },
         { name: "基中(男)", score: 0, type: "under", displayScore: "不足額" },
         { name: "基中(女)", score: 0, type: "under", displayScore: "不足額" },
@@ -461,71 +296,29 @@
         { name: "金山高中", score: 0, type: "under", displayScore: "不足額" }
     ];
 
-    // Functions to convert questions to grades
     function getChineseGrade(q) {
-        if (q >= 40) return 'A++';
-        if (q >= 39) return 'A+';
-        if (q >= 36) return 'A';
-        if (q >= 32) return 'B++';
-        if (q >= 28) return 'B+';
-        if (q >= 17) return 'B';
-        return 'C';
+        return q >= 40 ? 'A++' : q >= 39 ? 'A+' : q >= 36 ? 'A' : q >= 32 ? 'B++' : q >= 28 ? 'B+' : q >= 17 ? 'B' : 'C';
     }
-
     function getSocialGrade(q) {
-        if (q >= 52) return 'A++';
-        if (q >= 51) return 'A+';
-        if (q >= 48) return 'A';
-        if (q >= 41) return 'B++';
-        if (q >= 34) return 'B+';
-        if (q >= 20) return 'B';
-        return 'C';
+        return q >= 52 ? 'A++' : q >= 51 ? 'A+' : q >= 48 ? 'A' : q >= 41 ? 'B++' : q >= 34 ? 'B+' : q >= 20 ? 'B' : 'C';
     }
-
     function getScienceGrade(q) {
-        if (q >= 47) return 'A++';
-        if (q >= 46) return 'A+';
-        if (q >= 43) return 'A';
-        if (q >= 36) return 'B++';
-        if (q >= 29) return 'B+';
-        if (q >= 19) return 'B';
-        return 'C';
+        return q >= 47 ? 'A++' : q >= 46 ? 'A+' : q >= 43 ? 'A' : q >= 36 ? 'B++' : q >= 29 ? 'B+' : q >= 19 ? 'B' : 'C';
     }
-
     function getMathGrade(mc, nc) {
-        let weightedScore = (mc / 25) * 85 + (nc / 6) * 15;
-        // Handling floating point precision for range comparisons
-        weightedScore = Math.round(weightedScore * 100) / 100;
-        
-        if (weightedScore >= 91.60) return 'A++';
-        if (weightedScore >= 85.70) return 'A+';
-        if (weightedScore >= 77.10) return 'A';
-        if (weightedScore >= 68.70) return 'B++';
-        if (weightedScore >= 59.40) return 'B+';
-        if (weightedScore >= 39.00) return 'B';
-        return 'C';
+        let score = Math.round(((mc / 25) * 85 + (nc / 6) * 15) * 100) / 100;
+        return score >= 91.6 ? 'A++' : score >= 85.7 ? 'A+' : score >= 77.1 ? 'A' : score >= 68.7 ? 'B++' : score >= 59.4 ? 'B+' : score >= 39 ? 'B' : 'C';
     }
-
     function getEnglishGrade(read, listen) {
-        let weightedScore = (read / 43) * 80 + (listen / 21) * 20;
-        weightedScore = Math.round(weightedScore * 100) / 100;
-
-        if (weightedScore >= 98.14) return 'A++';
-        if (weightedScore >= 96.28) return 'A+';
-        if (weightedScore >= 90.70) return 'A';
-        if (weightedScore >= 82.30) return 'B++';
-        if (weightedScore >= 69.28) return 'B+';
-        if (weightedScore >= 38.43) return 'B';
-        return 'C';
+        let score = Math.round(((read / 43) * 80 + (listen / 21) * 20) * 100) / 100;
+        return score >= 98.14 ? 'A++' : score >= 96.28 ? 'A+' : score >= 90.7 ? 'A' : score >= 82.3 ? 'B++' : score >= 69.28 ? 'B+' : score >= 38.43 ? 'B' : 'C';
     }
 
     function calculateAndRecommend() {
         const errorMsg = document.getElementById('error-message');
         errorMsg.classList.add('hidden');
         errorMsg.innerText = '';
-
-        let totalScore = 0;
-        let cGrade, mGrade, eGrade, soGrade, scGrade;
+        let totalScore = 0, cGrade, mGrade, eGrade, soGrade, scGrade;
 
         try {
             if (currentMode === 'grade') {
@@ -535,68 +328,34 @@
                 totalScore += parseFloat(document.getElementById('grade-social').value);
                 totalScore += parseFloat(document.getElementById('grade-science').value);
                 totalScore += parseFloat(document.getElementById('grade-writing').value);
-                
                 document.getElementById('converted-grades-display').classList.add('hidden');
             } else {
-                // Read questions
-                const qChi = parseInt(document.getElementById('q-chinese').value || 0);
-                const qSoc = parseInt(document.getElementById('q-social').value || 0);
-                const qSci = parseInt(document.getElementById('q-science').value || 0);
-                const qMathMc = parseInt(document.getElementById('q-math-mc').value || 0);
-                const qMathNc = parseInt(document.getElementById('q-math-nc').value || 0);
-                const qEngRead = parseInt(document.getElementById('q-eng-read').value || 0);
-                const qEngList = parseInt(document.getElementById('q-eng-listen').value || 0);
-                const wScore = parseFloat(document.getElementById('q-writing').value);
+                const qChi = parseInt(document.getElementById('q-chinese').value || 0),
+                      qSoc = parseInt(document.getElementById('q-social').value || 0),
+                      qSci = parseInt(document.getElementById('q-science').value || 0),
+                      qMathMc = parseInt(document.getElementById('q-math-mc').value || 0),
+                      qMathNc = parseInt(document.getElementById('q-math-nc').value || 0),
+                      qEngRead = parseInt(document.getElementById('q-eng-read').value || 0),
+                      qEngList = parseInt(document.getElementById('q-eng-listen').value || 0),
+                      wScore = parseFloat(document.getElementById('q-writing').value);
 
-                // Validations
-                if(qChi > 42 || qSoc > 54 || qSci > 50 || qMathMc > 25 || qMathNc > 6 || qEngRead > 43 || qEngList > 21) {
-                    throw new Error("輸入的題數超過該科滿分題數，請重新確認！");
-                }
-                if(qChi < 0 || qSoc < 0 || qSci < 0 || qMathMc < 0 || qMathNc < 0 || qEngRead < 0 || qEngList < 0) {
-                    throw new Error("題數不能為負數！");
-                }
+                if(qChi > 42 || qSoc > 54 || qSci > 50 || qMathMc > 25 || qMathNc > 6 || qEngRead > 43 || qEngList > 21) throw new Error("輸入的題數超過該科滿分題數！");
+                if(qChi < 0 || qSoc < 0 || qSci < 0 || qMathMc < 0 || qMathNc < 0 || qEngRead < 0 || qEngList < 0) throw new Error("題數不能為負數！");
 
-                cGrade = getChineseGrade(qChi);
-                soGrade = getSocialGrade(qSoc);
-                scGrade = getScienceGrade(qSci);
-                mGrade = getMathGrade(qMathMc, qMathNc);
-                eGrade = getEnglishGrade(qEngRead, qEngList);
+                cGrade = getChineseGrade(qChi); soGrade = getSocialGrade(qSoc); scGrade = getScienceGrade(qSci);
+                mGrade = getMathGrade(qMathMc, qMathNc); eGrade = getEnglishGrade(qEngRead, qEngList);
 
-                // Display grades
-                document.getElementById('res-c').innerText = cGrade;
-                document.getElementById('res-e').innerText = eGrade;
-                document.getElementById('res-m').innerText = mGrade;
-                document.getElementById('res-so').innerText = soGrade;
-                document.getElementById('res-sc').innerText = scGrade;
+                ['c', 'e', 'm', 'so', 'sc'].forEach((id, i) => {
+                    document.getElementById(`res-${id}`).innerText = [cGrade, eGrade, mGrade, soGrade, scGrade][i];
+                });
                 document.getElementById('converted-grades-display').classList.remove('hidden');
-
-                // Sum
-                totalScore = gradePoints[cGrade] + gradePoints[mGrade] + gradePoints[eGrade] + 
-                             gradePoints[soGrade] + gradePoints[scGrade] + wScore;
+                totalScore = gradePoints[cGrade] + gradePoints[mGrade] + gradePoints[eGrade] + gradePoints[soGrade] + gradePoints[scGrade] + wScore;
             }
 
-            // Update UI Score
-            // Fix formatting to handle things like 35.8 or 36
-            let formattedScore = totalScore % 1 === 0 ? totalScore + ".0" : totalScore.toFixed(1);
-            
-            // Writing score has .1, .2, .4, .6, .8
-            if(totalScore.toString().length > 4) {
-                 formattedScore = totalScore.toFixed(1); // prevent 34.000000004
-            }
-
-            document.getElementById('final-score').innerText = formattedScore;
-
-            // Sort and Distribute Schools
+            document.getElementById('final-score').innerText = totalScore.toFixed(1);
             distributeSchools(totalScore);
-
-            // Show Results
             document.getElementById('results-section').classList.remove('hidden');
-            
-            // Scroll to results smoothly
-            setTimeout(() => {
-                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-
+            setTimeout(() => document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
         } catch (e) {
             errorMsg.innerText = e.message;
             errorMsg.classList.remove('hidden');
@@ -604,77 +363,39 @@
     }
 
     function createSchoolCard(school) {
-        const typeColors = {
-            'normal': 'bg-blue-100 text-blue-800 border-blue-200',
-            'vocational': 'bg-orange-100 text-orange-800 border-orange-200',
-            'under': 'bg-gray-100 text-gray-700 border-gray-200'
-        };
-        const typeText = {
-            'normal': '普通',
-            'vocational': '技職',
-            'under': '免試'
-        };
-
-        const colorClass = typeColors[school.type];
-        
+        const colors = { 'normal': 'bg-blue-100 text-blue-800 border-blue-200', 'vocational': 'bg-orange-100 text-orange-800 border-orange-200', 'under': 'bg-gray-100 text-gray-700 border-gray-200' },
+              texts = { 'normal': '普通', 'vocational': '技職', 'under': '免試' };
         return `
             <div class="border rounded-xl p-4 hover:shadow-md transition-shadow bg-white flex justify-between items-center">
                 <div>
                     <div class="font-bold text-gray-800 text-lg">${school.name}</div>
-                    <span class="text-xs font-semibold px-2 py-0.5 rounded ${colorClass}">${typeText[school.type]}</span>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded ${colors[school.type]}">${texts[school.type]}</span>
                 </div>
                 <div class="text-right">
                     <div class="text-xs text-gray-500 mb-1">參考分數</div>
                     <div class="font-black text-indigo-600">${school.displayScore}</div>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
     function distributeSchools(score) {
-        const dream = [];
-        const target = [];
-        const safe = [];
-
+        const dream = [], target = [], safe = [];
         schools.forEach(school => {
-            if (school.type === 'under') {
-                safe.push(school); // Always safe
-            } else {
-                // Using min score for calculation
+            if (school.type === 'under') { safe.push(school); } 
+            else {
                 const diff = score - school.score;
-
-                if (diff >= 0 && diff < 2.0) {
-                    target.push(school); // Score is enough, up to 2 points higher
-                } else if (diff >= 2.0) {
-                    safe.push(school);   // Score is significantly higher
-                } else if (diff < 0 && diff >= -1.0) {
-                    dream.push(school);  // Score is lower by at most 1 point
-                }
+                if (diff >= 0 && diff < 2.0) target.push(school);
+                else if (diff >= 2.0) safe.push(school);
+                else if (diff < 0 && diff >= -1.0) dream.push(school);
             }
         });
 
-        // Sort descending by score
-        target.sort((a, b) => b.score - a.score);
-        dream.sort((a, b) => b.score - a.score);
-        safe.sort((a, b) => b.score - a.score);
-
-        // Render
-        const dreamContainer = document.getElementById('list-dream');
-        const targetContainer = document.getElementById('list-target');
-        const safeContainer = document.getElementById('list-safe');
-
-        dreamContainer.innerHTML = dream.length > 0 
-            ? dream.map(createSchoolCard).join('') 
-            : `<div class="col-span-full text-gray-400 italic py-2 text-sm">無相近區間的夢幻志願。</div>`;
-            
-        targetContainer.innerHTML = target.length > 0 
-            ? target.map(createSchoolCard).join('') 
-            : `<div class="col-span-full text-gray-400 italic py-2 text-sm">此區間目前無對應學校。</div>`;
-            
-        safeContainer.innerHTML = safe.map(createSchoolCard).join('');
+        const sortFn = (a, b) => b.score - a.score;
+        document.getElementById('list-dream').innerHTML = dream.length ? dream.sort(sortFn).map(createSchoolCard).join('') : `<div class="col-span-full text-gray-400 italic py-2 text-sm">無相近區間的夢幻志願。</div>`;
+        document.getElementById('list-target').innerHTML = target.length ? target.sort(sortFn).map(createSchoolCard).join('') : `<div class="col-span-full text-gray-400 italic py-2 text-sm">此區間目前無對應學校。</div>`;
+        document.getElementById('list-safe').innerHTML = safe.sort(sortFn).map(createSchoolCard).join('');
     }
 
-    // Initialize display properly
     switchTab('grade');
 </script>
 </body>

@@ -1,46 +1,73 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- 1. Google 驗證標籤 (SEO) -->
+    <!-- 1. Google 驗證標籤 (SEO 權限核心) -->
     <meta name="google-site-verification" content="ewtIfo-nwhcsCEggex9vgjKmF7HLATN2PJ1616JP-zg" />
     
-    <!-- 2. 社交媒體預覽標籤 (Open Graph) -->
-    <meta property="og:title" content="會考成績落點分析系統">
-    <meta property="og:description" content="快速計算會考成績，並獲得精準的高中職志願落點分析。">
+    <!-- 2. 搜尋引擎最佳化描述 (SEO Meta Tags) -->
+    <title>2026 基北區會考成績計算與落點分析系統 🐾</title>
+    <meta name="description" content="專為基北區國中會考打造的落點分析系統。內嵌精準的數學、英文公式加權演算法，支援等級與答對題數雙重換算模式，一鍵快速分析出最具參考價值的志願序排序！">
+    <meta name="keywords" content="會考落點分析, 基北區會考, 會考成績預估, 115會考, 會考積分計算器, 0xseanlee">
+    
+    <!-- 3. 社交媒體預覽標籤 (Open Graph) -->
+    <meta property="og:title" content="2026 基北區會考成績計算與落點分析系統">
+    <meta property="og:description" content="內嵌精準公式加權演算法，一鍵獲得最具參考價值的高中職志願落點分析。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://0xseanlee.github.io/cap-score-calculator/">
     
-    <title>會考成績計算與落點分析系統</title>
+    <!-- 4. 外部框架與動畫庫載入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            font-family: 'Fredoka One', 'Noto Sans TC', sans-serif;
+            background-color: #fcfbfa; /* 同步主網頁：溫柔牛奶白 */
+            color: #4a423a; /* 同步主網頁：高質感深可可色，降低閱讀疲勞 */
         }
+        
         .fade-in {
             animation: fadeIn 0.5s ease-in-out forwards;
         }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Cinnamoroll 輕奢療癒風：重新定義 Tab 切換鈕樣式 */
         .tab-active {
-            background-color: #3b82f6;
+            background-color: #1e88e5; /* 大耳狗天空藍 */
             color: white;
-            border-color: #3b82f6;
+            border-color: #1e88e5;
+            box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
         }
+        
         .tab-inactive {
-            background-color: white;
-            color: #4b5563;
-            border-color: #d1d5db;
+            background-color: #fef9e7; /* 軟綿綿淡黃色 */
+            color: #6d6154;
+            border-color: #f9ebbe;
         }
-        /* Hide number input spinners */
+        
+        .tab-inactive:hover {
+            background-color: #ffffff;
+            border-color: #bbdefb;
+            color: #1e88e5;
+        }
+        
+        /* 網頁卡片基本配置 */
+        .cute-card {
+            background-color: #fef9e7;
+            border: 2px solid #f9ebbe;
+            border-radius: 20px;
+        }
+
+        /* 隱藏數字輸入框的上下箭頭 (維持輸入框美觀) */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
